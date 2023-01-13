@@ -13,7 +13,16 @@ Um microsserviço pode representar um estoque, outro pode representar o gerencia
 
 **Contexto**
 
-O desenvolvimento de microsserviços tem sido uma área em rápido crescimento nos últimos anos, pois muitas empresas estão buscando construir sistemas de grande escala de maneira escalonável. Neste artigo, vamos descrever um exemplo de prova de conceito com microsserviço. O exemplo consiste em desenvolver uma aplicação simples que usa vários microsserviços para processar dados. O objetivo é demonstrar como microsserviços podem ser usados para criar aplicações de grande escala de maneira simples e escalonável. Primeiro, vamos descrever a arquitetura da aplicação. Depois, vamos abordar o processo de implementação e implantação de cada microsserviço. Por último, vamos mostrar como todos os microsserviços se conectam para criar uma aplicação funcional.
+O desenvolvimento de microsserviços tem sido uma área em rápido crescimento nos últimos anos, pois muitas empresas estão buscando construir sistemas de grande escala de maneira escalonável. Neste artigo, vamos descrever um exemplo de prova de conceito com microsserviço. O exemplo consiste em desenvolver e implantar um microsserviço sem servidor. Microsserviços sem servidor são um novo paradigma de desenvolvimento de aplicações baseadas na arquitetura de microsserviços, mas sem a necessidade de um servidor de aplicações. Ao contrário dos microsserviços tradicionais, os microsserviços sem servidor são executados em um ambiente de nuvem, que permite que as aplicações sejam executadas em qualquer lugar. Essa abordagem permite que as aplicações sejam acessíveis a partir de qualquer lugar, a qualquer hora, desde que exista uma conexão à internet.
+
+**Objetivo**
+
+O objetivo principal de criar um microsserviço sem servidor é fornecer uma arquitetura escalável e flexível que se adapte às necessidades do negócio. Isso significa que os desenvolvedores.
+
+
+
+
+
 
 Implementação: Case
 
