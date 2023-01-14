@@ -49,7 +49,7 @@ f) A dependência dos componentes: o sistema inteiro pode ser afetado se o novo 
 
 > Não há uma solução única para este problema, estamos propondo um exercício para estudos.
 
-Separar o módulo de geração de imagens do sistema monolítico, transformando-o em um microsserviço. Ao final da migração, teremos um sistema híbrido, parte monolítico e parte microserviços.
+Separar o módulo de geração de imagens do sistema monolítico, transformando-o em um microsserviço. Ao final da migração, teremos um sistema híbrido, parte monolítico e parte microsserviços.
 
 
 **Implementação: Refatoração do sistema monolítico**
