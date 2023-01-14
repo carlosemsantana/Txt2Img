@@ -68,8 +68,8 @@ a) Refatore gradualmente;<br>
 b) Estude padrões de migração e adote uma técnica; (exemplos: strangler fig, composição de UI, branch por abstração, execução em paralelo, colaborador decorador e/ou captura de dados modificados, ...)<p>
 
 **Cenário atual: AS-IS**
-
-<img src="img/fig1.png" alt="Cenário Atual" style="float:left;width:320px">
+    
+<img src="img/fig1.png" alt="Cenário Atual" style="float:left;width:340px">
 
 
 **Cenário futuro: TO-BE**
