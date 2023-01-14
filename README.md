@@ -37,12 +37,12 @@ Um sistema monolítico modular é um sistema de software cujas principais caract
 
 **Quais foram os principais desafios?**
 
-a) As boas práticas não haviam sido implementadas no sistema;<br>
-b) Complexidade de escalar, pois todos os módulos precisavam ser modificados e atualizados ao mesmo tempo;<br>
-c) A complexidade do sistema torna-o difícil de entender e não havia documentação;<br>
-d) Para reescrever o módulo de imagens, não seria tarefa fácil sem documentação;<br>
-e) Seria difícil testar, pois todas as partes do sistema devem ser testadas simultaneamente;<br>
-f) A dependência dos componentes: o sistema inteiro pode ser afetado se o novo componente falhar.
+- As boas práticas não haviam sido implementadas no sistema;
+- Complexidade de escalar, pois todos os módulos precisavam ser modificados e atualizados ao mesmo tempo;
+- A complexidade do sistema torna-o difícil de entender e não havia documentação;
+- Para reescrever o módulo de imagens, não seria tarefa fácil sem documentação;
+- Seria difícil testar, pois todas as partes do sistema devem ser testadas simultaneamente;
+- A dependência dos componentes: o sistema inteiro pode ser afetado se o novo componente falhar.
 
 
 **Solução**
