@@ -69,7 +69,7 @@ b) Estude padrões de migração e adote uma técnica; (exemplos: strangler fig,
 
 **Cenário atual: AS-IS**
     
-<img src="img/fig1.png" alt="Cenário Atual" style="float:left;width:340px">
+<img src="img/fig1.png" alt="Cenário Atual" style="float:left;width:400px">
 
 
 **Cenário futuro: TO-BE**
