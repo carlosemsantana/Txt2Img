@@ -56,16 +56,16 @@ Separar o módulo de geração de imagens do sistema monolítico, transformando-
 
 **Riscos**
 
-a) O ambiente de produção suporta microsserviços?
-b) O custo da mudança será suportado pela empresa?
-c) Existe algum "gap" na equipe desenvolvimento para trabalhar com microsserviços?
-d) Temos visão clara do módulo que vamos extrair?
-e) Código não está organizado em torno de conceito de domínios de negócios.
+a) O ambiente de produção suporta microsserviços?<br>
+b) O custo da mudança será suportado pela empresa?<br>
+c) Existe algum "gap" na equipe desenvolvimento para trabalhar com microsserviços?<br>
+d) Temos visão clara do módulo que vamos extrair?<br>
+e) Código não está organizado em torno de conceito de domínios de negócios.<p>
 
 **Design Parttners**
 
 a) Refatore gradualmente;<br>
-b) Estude padrões de migração e adote uma técnica; (exemplos: strangler fig, composição de UI, branch por abstração, execução em paralelo, colaborador decorador e/ou captura de dados modificados, ...)
+b) Estude padrões de migração e adote uma técnica; (exemplos: strangler fig, composição de UI, branch por abstração, execução em paralelo, colaborador decorador e/ou captura de dados modificados, ...)<p>
 
 **Cenário atual: AS-IS**
 
