@@ -2,7 +2,7 @@
 
 **Resumo**
 
-Neste artigo, vamos explorar como criar microsserviços usando Python, Flask e a API do OpenAI para retornar imagens. Começaremos com uma visão geral dos microsserviços e como eles se relacionam à API OpenAI. Depois, usaremos o Python e o Flask para criar um microsserviço que retornará uma imagem a partir da API OpenAI. Por último, discutiremos algumas considerações e lógicas que devem ser consideradas ao construir APIs para retornar imagens.
+Neste artigo, vamos explorar como criar microsserviços usando Python, Flask e a API do OpenAI. Começaremos com uma visão geral dos microsserviços e como eles se relacionam à API OpenAI. Depois, usaremos o Python e o Flask para criar um microsserviço que retornará uma imagem a partir da API OpenAI. Por último, discutiremos algumas considerações e lógicas que devem ser consideradas ao construir APIs para retornar imagens.
 
 **Introdução: O que são microsserviços?**
 
@@ -18,38 +18,36 @@ O desenvolvimento de microsserviços tem sido uma área em rápido crescimento n
 
 **Objetivo**
 
-O objetivo principal de realizar o estudo deste tema é verificar se microsserviço sem servidor é viável e se atende às necessidades de um projeto. Esta prova de conceito implementará uma solução de forma limitada.
+O objetivo principal é verificar se microsserviços sem servidor são viáveis, e se atendem às necessidades de um projeto. Esta prova de conceito implementará uma solução de um problema hipotético de forma limitada.
 
 **Definição do problema**
 
 ***Exemplo hipotético:***
 
-Um sistema monolítico modular de e-commerce de imagens que recebe centenas de requisições de pedidos na internet, está gerando muito "tikets" de suporte no setor de atendimento da empresa. A principal reclamação é lentidão na geração das imagens.
+Um sistema monolítico modular, que comercializa imagens e recebe centenas de requisições de pedidos na internet, está gerando muito "tikets" de suporte no setor de atendimento da empresa. A principal reclamação é lentidão na geração das imagens.
+
+Um sistema monolítico modular é um sistema de software cujas principais características são o fato de que o código é mantido em módulos, porém, todas as partes do sistema são construídas e mantidas como uma unidade.
 
 
 **Implementação: Case**
 
 
-O estudo da causa raiz do problema recomenda a necessidade do sistema monolítico modular de e-commerce de imagens ser atualizado, porém, como é um sistema crítico será preciso realizar planejamento para a migração do sistema monolítico modular para outra solução.
-
-Um sistema monolítico modular é um sistema de software cujas principais características são o fato de que o código é mantido em módulos, porém, todas as partes do sistema são construídas e mantidas como uma unidade.
+Um estudo preliminar do problema, recomendou à gestão de produtos atualização urgente do sistema de imagens.
 
 
 **Quais foram os principais desafios?**
 
-- As boas práticas não haviam sido implementadas no sistema;
-- Complexidade de escalar, pois todos os módulos precisavam ser modificados e atualizados ao mesmo tempo;
-- A complexidade do sistema torna-o difícil de entender e não havia documentação;
-- Para reescrever o módulo de imagens, não seria tarefa fácil sem documentação;
-- Seria difícil testar, pois todas as partes do sistema devem ser testadas simultaneamente;
-- A dependência dos componentes: o sistema inteiro pode ser afetado se o novo componente falhar.
+- Tráfego do site muito alto;
+- Código do sistema extenso e sem documentação;
+- Complexidade de escalar e testar, pois todos os módulos precisavam ser modificados, testados e atualizados ao mesmo tempo;
+- Forte dependência dos componentes: o sistema inteiro pode ser afetado se o novo componente falhar.
 
 
 **Solução**
 
 > Não há uma solução única para este problema, estamos propondo um exercício para estudos.
 
-Separar o módulo de geração de imagens do sistema monolítico, transformando-o em um microsserviço. Ao final da migração, teremos um sistema híbrido, parte monolítico e parte microsserviços.
+A proposição foi refatorar o módulo de geração de imagens do sistema monolítico, transformando-o em um microsserviço.
 
 
 **Implementação: Refatoração do sistema monolítico**
@@ -60,7 +58,6 @@ a) O ambiente de produção suporta microsserviços?<br>
 b) O custo da mudança será suportado pela empresa?<br>
 c) Existe algum "gap" na equipe desenvolvimento para trabalhar com microsserviços?<br>
 d) Temos visão clara do módulo que vamos extrair?<br>
-e) Código não está organizado em torno de conceito de domínios de negócios.<p>
 
 **Design Parttners**
 
