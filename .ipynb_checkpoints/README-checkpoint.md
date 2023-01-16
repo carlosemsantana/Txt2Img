@@ -1,13 +1,10 @@
-# Criando Microsserviços com Python, Flask e OpenAI: Construindo APIs para Retornar Imagens
+<!-- #region -->
+# Criando Microsserviços: Projetando componete com Python, Flask e API OpenAI
 
-**Resumo**
-
-Neste artigo, vamos explorar como criar microsserviços usando Python, Flask e a API do OpenAI. Começaremos com uma visão geral dos microsserviços e como eles se relacionam à API OpenAI. Depois, usaremos o Python e o Flask para criar um microsserviço que retornará uma imagem a partir da API OpenAI. Por último, discutiremos algumas considerações e lógicas que devem ser consideradas ao construir APIs para retornar imagens.
 
 **Introdução: O que são microsserviços?**
 
->***Newman (2022, p. 24) define microsserviços d
-a seguinte forma:***
+>***Newman (2022, p. 24) define microsserviços da seguinte forma:***
 >
 >(…) microsserviços são serviços que podem ser lançados de forma independente e são modelados com base em um domínio de negócios. Um serviço encapsula uma funcionalidade e a torna acessível a outros serviços através de redes – podemos criar um sistema mais complexo a partir destes blocos de construção. 
 Um microsserviço pode representar um estoque, outro pode representar o gerenciamento de pedidos, enquanto outro ainda representa a expedição de mercadorias; juntos, porém, eles podem compor um sistema completo de comércio eletrônico.
@@ -27,7 +24,7 @@ O objetivo principal é verificar se microsserviços sem servidor são viáveis,
 Um sistema monolítico modular, que comercializa imagens e recebe centenas de requisições de pedidos na internet, está gerando muito "tikets" de suporte no setor de atendimento da empresa. A principal reclamação é lentidão na geração das imagens.
 
 Um sistema monolítico modular é um sistema de software cujas principais características são o fato de que o código é mantido em módulos, porém, todas as partes do sistema são construídas e mantidas como uma unidade.
-
+<!-- #endregion -->
 
 **Implementação: Case**
 
