@@ -65,8 +65,9 @@ b) Estude padrões de migração e adote uma técnica; (exemplos: strangler fig,
 **Cenário atual: AS-IS**
 
 
-Identifique o módulo a ser movido, as depedências, o fluxo do processo, quais serão as chamadas que serão redirecionadas e amplie a visão para descobrir a existência de dependências ou chamadas externas.
-A figura 1. representa exemplo simplificado de verificação preliminar para ilustração de exemplo.
+Elabore esboço que represente o cenário atual e considere: o negócio, os dados, a aplicação e as tecnologias.
+Consulte as documentações disponíveis do sistema, arquitetura, infra-estrutura, tecnologia, explore o código fonte (quando possível) e converse com os mantenedores do sistema. 
+No diagrama AS-IS, identifique o módulo a ser movido, as depedências, os fluxos dos processos, as chamadas que serão redirecionadas e todas as dependências externas. A figura 1. representa exemplo simplificado.
 
 
 ![](img/fig1.png)
@@ -76,7 +77,9 @@ A figura 1. representa exemplo simplificado de verificação preliminar para ilu
 
 
 
-Figura 2. representa exemplo simplificado de extração do módulo gerador de imagens que foi identificado a ser movido para microsserviços. O ideal é mover a funcionalidade ou módulo para a nova arquitetura de microserviços sem fazer qualquer alteração no sistema atual, porém, nesse caso será preciso criar novo fluxo de requisições do módulo que gera os requisitos para criação das imagens e a entrega final ao cliente. Existem algumas técnicas, interceptação de mensagens ou roteamento não vamos abordar.
+No diagrama TO-BE, considere processo gradual de refatoração do sistema monolítico. O ideal ao extrair a funcionalidade para implementação na nova arquitetura, não tenhamos alteração no sistema atual, porém, em alguns casos, não é possível. Precisamos examinar, qual é a melhor solução. Existem muitas soluções que poderão ser adotadas, tais como: Interceptação de mensagens, roteamento, espelhamento, implementação de API interna; que redirecione o fluxo de requisições do módulo que foi extraído para o novo serviço. O importante é que tenhamos a disposição, ambiente seguro e isolado, onde provas de conceito poderão ser avaliadas. E lembre-se: agilidade não tem nada a ver com "Go Horse", planejamento é fundamental.
+
+Figura 2. representa exemplo simplificado da extração do módulo a ser refatorado para microsserviços.
 
 
 ![](img/fig2.png)
