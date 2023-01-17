@@ -85,21 +85,70 @@ Figura 2. representa exemplo simplificado da extração do módulo a ser refator
 ![](img/fig2.png)
 
 
-Arquitetura
+**Modelar o microsserviço: Gerador de Imagens**
 
-Tecnologias: Python | Fask | OAuth | OpenAI API | Docker | AWS
 
-Modelar
+**Exemplos de Requisitos:**
 
-Comunicação
 
-Monitoração
+1° Defina as Fronteiras do microsserviço: Fronteira é uma delimitação de responsabilidade entre dois microsserviços. Ela define quais ações cada microsserviço deve executar, e quais regras devem ser seguidas para que os serviços se comuniquem. As fronteiras permitem que microsserviços sejam desenvolvidos, implantados e gerenciados de forma independente, melhorando a escalabilidade e flexibilidade da arquitetura.
 
-Segurança
 
-Testes
+2° A modelagem, design orientado a Domínio (linguagem ubíqua, agregado, contexto delimitado), permite que ao gerador de imagens, Baixo acoplamento: capacidade de ser implantado, executado e mantido de forma independente e isolada dos outros módulos do sistemas. 
 
-Conclusão
+
+3° Defina a Comunicação que será implementada no Microsserviço: REST (requisição-resposta) 
+
+
+4° Defina se haverá persistência dos Dados: Adotaremos padrão de dados não estruturados (NoSQL).
+
+
+5° Tecnologias adotadas: Python, Fask, OpenAI API, Docker, Função como serviço (FaaS): AWS Lambda, API Gateway, AWS DinamoDB e Github.
+
+
+6° Execução Infraestrutura como código e implantação sem downtime.
+
+
+7° Escababilidade Horizontal.
+
+
+8° Monitoração: Os logs centralizados são uma parte importante do desenvolvimento de microsserviços, pois permitem que os desenvolvedores tenham uma visão abrangente sobre o que está acontecendo com sistema. As ferramentas de log centralizadas permitem que os desenvolvedores rastreiem erros, monitorar as principais métricas de performance e verificar o comportamento dos serviços. Isso ajuda a garantir que os serviços estejam operando corretamente e permitem que os desenvolvedores identifiquem rapidamente e corrijam erros ou problemas que possam surgir.
+
+
+9° Fluxo de trabalho: O sistema monolítico tem o seu fluxo de transações ACID, e quando ocorre erro é preciso executar rollback. Considere que quando houver um erro o microsserviços precisará executar algum processo de rollback.
+
+
+10° Segurança: Considere os aspéctos da segurança e complice.
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
+```
+
+
 
 ```python
 
