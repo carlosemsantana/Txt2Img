@@ -23,7 +23,7 @@ O objetivo principal é verificar se microsserviços sem servidor são viáveis,
 
 Um sistema monolítico modular, que comercializa imagens e recebe centenas de requisições de pedidos na internet, está gerando muito "tikets" de suporte no setor de atendimento da empresa. A principal reclamação é lentidão na geração das imagens.
 
-Um sistema monolítico modular é um sistema de software cujas principais características são o fato de que o código é mantido em módulos, porém, todas as partes do sistema são construídas e mantidas como uma unidade.
+Um sistema monolítico modular, é um sistema de software cujas principais características são: código é mantido em módulos, todas as partes do sistema são dependentes e todos os módulos precisam ser atualizados ao mesmo tempo.
 <!-- #endregion -->
 
 **Implementação: Case**
@@ -36,7 +36,7 @@ Um estudo preliminar do problema, recomendou à gestão de produtos atualizaçã
 
 - Tráfego do site muito alto;
 - Código do sistema extenso e sem documentação;
-- Complexidade de escalar e testar, pois todos os módulos precisavam ser modificados, testados e atualizados ao mesmo tempo;
+- Complexidade para escalar e testar;
 - Forte dependência dos componentes: o sistema inteiro pode ser afetado se o novo componente falhar.
 
 
@@ -59,15 +59,27 @@ d) Temos visão clara do módulo que vamos extrair?<br>
 **Design Parttners**
 
 a) Refatore gradualmente;<br>
-b) Estude padrões de migração e adote uma técnica; (exemplos: strangler fig, composição de UI, branch por abstração, execução em paralelo, colaborador decorador e/ou captura de dados modificados, ...)<p>
+b) Estude padrões de migração e adote uma técnica; (exemplos: strangler fig, composição de UI, branch por abstração, execução em paralelo, colaborador decorado, captura de dados modificados e outros.)<p>
+
 
 **Cenário atual: AS-IS**
-    
-<img src="img/fig1.png" alt="Cenário Atual" style="float:left;width:400px">
+
+
+Identifique o módulo a ser movido, as depedências, o fluxo do processo, quais serão as chamadas que serão redirecionadas e amplie a visão para descobrir a existência de dependências ou chamadas externas.
+A figura 1. representa exemplo simplificado de verificação preliminar para ilustração de exemplo.
+
+
+![](img/fig1.png)
 
 
 **Cenário futuro: TO-BE**
 
+
+
+Figura 2. representa exemplo simplificado de extração do módulo gerador de imagens que foi identificado a ser movido para microsserviços. O ideal é mover a funcionalidade ou módulo para a nova arquitetura de microserviços sem fazer qualquer alteração no sistema atual, porém, nesse caso será preciso criar novo fluxo de requisições do módulo que gera os requisitos para criação das imagens e a entrega final ao cliente. Existem algumas técnicas, interceptação de mensagens ou roteamento não vamos abordar.
+
+
+![](img/fig2.png)
 
 
 Arquitetura
