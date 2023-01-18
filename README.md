@@ -23,14 +23,10 @@ O objetivo principal é verificar se microsserviços sem servidor são viáveis,
 
 Um sistema monolítico modular, que comercializa imagens e recebe centenas de requisições de pedidos na internet, está gerando muito "tikets" de suporte no setor de atendimento da empresa. A principal reclamação é lentidão na geração das imagens.
 
-Um sistema monolítico modular, é um sistema de software cujas principais características são: código é mantido em módulos, todas as partes do sistema são dependentes e todos os módulos precisam ser atualizados ao mesmo tempo.
+Sistema monolítico modular, é um sistema de software cujas principais características são: código é mantido em módulos, todas as partes do sistema são dependentes e todos os módulos precisam ser atualizados ao mesmo tempo.
+
+Estudo preliminar do problema, recomendou à gestão de produtos atualização urgente do sistema de imagens.
 <!-- #endregion -->
-
-**Implementação: Case**
-
-
-Um estudo preliminar do problema, recomendou à gestão de produtos atualização urgente do sistema de imagens.
-
 
 **Quais foram os principais desafios?**
 
@@ -47,7 +43,7 @@ Um estudo preliminar do problema, recomendou à gestão de produtos atualizaçã
 A proposição foi refatorar o módulo de geração de imagens do sistema monolítico, transformando-o em um microsserviço.
 
 
-**Implementação: Refatoração do sistema monolítico**
+**Proposição: Refatoração do sistema monolítico**
 
 **Riscos**
 
@@ -117,21 +113,17 @@ Figura 2. representa exemplo simplificado da extração do módulo a ser refator
 
 **Implementação**
 
-```python
 
-```
+Exemplo de diagrama da arquitetura (freestyle); PoC - prova de conceito, para a implantação da solução de forma hibrida e gradual, onde foi extraído do sistema monolítico somente a funcionalidade que estava apresentando o problema, em destaque: Figura 3. Visão geral da estrutura e componentes-chave. 
 
-```python
 
-```
+![](img/fig3.png)
 
-```python
 
-```
+Vamos escrever um microsserviço com base no diagrama de entras e saídas listado na Figura 5. Não implementaremos a monitoração, Figura 6.  A depuração de problemas em ambiente microsserviços é extremamente complexa. Recomendamos que considere implemetar, uma forma automatizada ou não de centralizar e examinar os logs.
 
-```python
 
-```
+![](img/fig4.png)
 
 ```python
 
