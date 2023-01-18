@@ -125,19 +125,22 @@ Vamos escrever um microsserviço com base no diagrama de entradas e saídas, Fig
 
 ![](img/fig4.png)
 
-```python
 
-```
-
-```python
-
-```
+**Requitos Técnicos**
 
 
+1° Cadastro e acesso aos recursos da AWS;<br>
+2° Cadastro e acesso API OpenAI API;<br>
+3° Python instalado;<br>
+4° Flask instalado;<br>
+5° Docker instalado;<br>
+6° Integração via Github; 
 
-```python
 
-```
+
+
+
+**Exemplo do Código**
 
 ```python
 
