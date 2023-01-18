@@ -120,7 +120,7 @@ Exemplo de diagrama da arquitetura (freestyle); PoC - prova de conceito, para a 
 ![](img/fig3.png)
 
 
-Vamos escrever um microsserviço com base no diagrama de entras e saídas listado na Figura 5. Não implementaremos a monitoração, Figura 6.  A depuração de problemas em ambiente microsserviços é extremamente complexa. Recomendamos que considere implemetar, uma forma automatizada ou não de centralizar e examinar os logs.
+Vamos escrever um microsserviço com base no diagrama de entradas e saídas listado na Figura 5. Não implementaremos a monitoração, Figura 6.  A depuração de problemas em ambiente microsserviços é extremamente complexa. Recomendamos que considere implemetar, uma forma automatizada ou não de centralizar e examinar os logs.
 
 
 ![](img/fig4.png)
