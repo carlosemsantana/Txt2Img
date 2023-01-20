@@ -1,5 +1,5 @@
 <!-- #region -->
-# Criando Microsserviços: Projetando componete com Python, Flask e API OpenAI
+# Criando Microsserviços: Projetando componete com Python e API OpenAI
 
 
 **Introdução: O que são microsserviços?**
@@ -129,19 +129,206 @@ Vamos escrever um microsserviço com base no diagrama de entradas e saídas, Fig
 **Requitos Técnicos**
 
 
-1° Cadastro e acesso aos recursos da AWS;<br>
-2° Cadastro e acesso API OpenAI API;<br>
-3° Python instalado;<br>
-4° Flask instalado;<br>
-5° Docker instalado;<br>
-6° Integração via Github; 
+1° Cadastro e cheve de acesso aos recursos da AWS;<br>
+2° Cadastro e chave de acesso - API OpenAI API;<br>
+3° Python 3.9;<br>
+4° AWS Command Line Interface; ([Installing or updating the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html))<br>
+5° Docker (latest);<br>
+6° Github (latest); 
 
 
+**Exemplo ilustrando o processo de criação de Função como serviço (FaaS) na AWS**
 
+<!-- #region -->
+1° Crie o ambiente:
+```python
+$ mkdir geradorImagens
+$ cd geradorImagens
+$ mkdir imagemCriada
+$ python3 -m venv venv
+$ . venv/bin/activate
+```
+2° Instale todas as dependências:
+```python
+$ pip install requests
+$ pip install openai
+$ pip install flask 
+$ pip install wget
+$ pip install uuid
+```
+3° Exemplo ilustrativo de código de serviço em Python 3.9, escrito no formato suportado pelo AWS Lambda. Este serviço acessa uma API externa, (OpenAI API) envia requisição para que a IA crie uma imagem, e recebe a requisição de resposta. (Não foi implementado gravação dos dados no AWS DinamoDB)
 
+Arquivo: app.py
 
-**Exemplo do Código**
+```python
+# Instale os pacotes requeridos.
+import requests
+import json
+import os
+import openai
+import wget
+import uuid
+
+def handler(event, context):
+    # Simulação de entrada de dados no formato JSON
+    solicitacao_cliente = {
+        "prompt": "Crie uma cópia idêntica da obra: Relógios Encontrando Relógios - Salvador Dalí",
+        "n": 1,
+        "size": "1024x1024"
+    }
+    payload = json.dumps(solicitacao_cliente)
+    # Para gerar o token cadastre-se em (https://beta.openai.com/account/api-keys)
+    # Token de acesso
+    # Atenção: Não permita que o seu token seja descoberto, neste exemplo esse token
+    #          já foi revogado (cancelado)
+    token = openai.api_key = "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"
+    # Endpoint do OpenAI API a cada requisição enviada uma resposta é retornada.
+    # https://beta.openai.com/docs/api-reference/images
+    url = "https://api.openai.com/v1/images/generations"
+    # Cabeçalho com formato e o token de acesso. O Token é passado via Header no POST
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + str(token)
+    }
+    # OpenAI API aceita as requisições com atributos formatados em JSON
+    # Atributos: Prompt: Entrada de dados, descreva o que deseja que a IA desenhe".
+    #                 n: Quantidade de repetições
+    #              size: Tamanho das imagens (1024, 512 ou 256)
+    # https://beta.openai.com/docs/models/overview
+    response = requests.request("POST", url, headers=headers, data=payload)
+    resposta = json.loads(response.text)
+    # A resposta da API é uma imagem. 
+    # Baixar e gravar a imagem em disco.
+    # URI da imagem que foi gerada.
+    url = resposta['data'][0]['url']
+    # Grava imagem
+    file = "imagemCriada/" + str(uuid.uuid4()) + str(".png")
+    wget.download(url,file)
+    # Verifica se a imagem foi gerada
+    if os.path.exists(file):
+        # retorna código de sucesso e o nome da imagem gerada
+        value = {"processamento": 200,"imagem": file}
+        return json.dumps(value)
+    else:
+        # retorna código de erro.
+        value = {"processamento": 400,"msg": "Erro, imagem não foi criada..."}
+        return json.dumps(value)  
+# Quando executado via console
+if __name__ == "__main__":
+    handler(0,0)
+```
+4° Gerar o arquivo requeriments.txt com as dependências deste exemplo.
+
+```python
+# Gerar lista de pacotes requeridos do projeto.
+$ pip freeze > requirements.txt
+
+Dependências:
+
+aiohttp==3.8.3
+aiosignal==1.3.1
+async-timeout==4.0.2
+attrs==22.2.0
+certifi==2022.12.7
+charset-normalizer==2.1.1
+click==8.1.3
+Flask==2.2.2
+frozenlist==1.3.3
+idna==3.4
+importlib-metadata==6.0.0
+itsdangerous==2.1.2
+Jinja2==3.1.2
+MarkupSafe==2.1.2
+multidict==6.0.4
+openai==0.26.1
+requests==2.28.2
+tqdm==4.64.1
+urllib3==1.26.14
+uuid==1.30
+Werkzeug==2.2.2
+wget==3.2
+yarl==1.8.2
+zipp==3.11.0
+
+```
+<!-- #endregion -->
+
+**Gerar imagem e enviar para AWS**
+
+<!-- #region -->
+Estamos trabalhando com containers Dockers; usaremos o Docker compose para gerenciar a criação da imagem e o container que será aplicado. Os próximos passos são:
+
+1° criar arquivo docker-compose.yml
+
+```python
+version: '3.8'
+services:
+    microsservicos:
+      container_name: geradorimagens
+      build: .     
+```
+
+2° criar arquivo Dockerfile
 
 ```python
 
+FROM public.ecr.aws/lambda/python:3.9
+
+# Copy function code
+COPY app.py ${LAMBDA_TASK_ROOT}
+
+# Install the function's dependencies using file requirements.txt
+# from your project folder.
+
+COPY requirements.txt  .
+RUN  pip3 install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+
+# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+CMD [ "app.handler" ]
+
 ```
+
+3° Gerar a imagem docker
+
+```python
+
+$ docker compose up -d 
+```
+<!-- #endregion -->
+
+Build da imagem do container do microsserviço gerado com sucesso.
+
+![](img/fig5.png)
+
+
+4° Preparar a imagem para envio ao ECR (Amazon Elastic Container Registry).
+
+**Rquesito: repositório ECR criado.**
+
+Referência: [Amazon Elastic Container Registry Documentation](https://docs.aws.amazon.com/ecr/)
+
+<!-- #region -->
+Renomeie a imagem de acordo requerido pelo ECR e envie.
+```python
+$ docker tag txt2img-microsservicos:latest 65********48.dkr.ecr.us-east-1.amazonaws.com/2ms:latest
+$ docker push 65********48.dkr.ecr.us-east-1.amazonaws.com/2ms:latest
+```
+<!-- #endregion -->
+
+Imagem enviada para o repositório com sucesso.
+![](img/fig6.png)
+
+
+**Última etapa: Criar a Função, API Gateway, o Endpoint e Testar.**
+
+
+1° Crie usuário no Identity and Access Management (IAM), configure permissões e gere a chave de acesso;<br>
+2° Configure a chave de acesso no seu ambinte desenvolvimento; <br>
+3° Crie a Função e use a imagem que foi enviada para o ECR;<br>
+4° Crie e configure um Bucket S3, para baixar as imagens;<br>
+5° Configure as permissões e rotas de acesso ao S3;
+4° Ajuste e Teste o Lambda;<br>
+6° Crie API Gateway;<br>
+7° Crie o Endpoint público;<br>
+
+Referência: [Implante funções do Lambda em Python com imagens de contêiner](https://docs.aws.amazon.com/pt_br/lambda/latest/dg/python-image.html)

@@ -1,0 +1,5 @@
+version: '3.8'
+services:
+    microsservicos:
+      container_name: geradorimagens
+      build: .
