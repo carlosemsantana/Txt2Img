@@ -1,5 +1,9 @@
 FROM public.ecr.aws/lambda/python:3.9
 
+# Cria diretório temporário para baixar as imagens
+RUN mkdir -p ${LAMBDA_TASK_ROOT}/imagens
+RUN chmod 775 -R ${LAMBDA_TASK_ROOT}/imagens
+
 # Copy function code
 COPY app.py ${LAMBDA_TASK_ROOT}
 
