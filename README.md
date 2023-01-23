@@ -1,5 +1,5 @@
 <!-- #region -->
-# Criando Microsserviços: Projetando componete com Python e API OpenAI
+# Criando Microsserviços: Projetando componente com Python e API OpenAI
 
 
 **Introdução: O que são microsserviços?**
