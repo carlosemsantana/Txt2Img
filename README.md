@@ -137,10 +137,10 @@ Vamos escrever um microsserviço com base no diagrama de entradas e saídas, Fig
 6° Github (latest); 
 
 
-**Exemplo ilustrando o processo de criação de Função como serviço (FaaS) na AWS**
+**Exemplo ilustrando o processo da criação de Função como serviço (FaaS) na AWS**
 
 <!-- #region -->
-1° Crie o ambiente:
+1° Crie o ambiente desenvolvimento:
 ```python
 $ mkdir geradorImagens
 $ cd geradorImagens
@@ -148,15 +148,17 @@ $ mkdir imagemCriada
 $ python3 -m venv venv
 $ . venv/bin/activate
 ```
-2° Instale todas as dependências:
+2° Instale todas as dependências no ambiente:
 ```python
 $ pip install requests
 $ pip install openai
-$ pip install flask 
 $ pip install wget
-$ pip install uuid
+$ pip install json
+$ pip install os
+$ pip install boto3
 ```
-3° Exemplo ilustrativo de código de serviço em Python 3.9, escrito no formato suportado pelo AWS Lambda. Este serviço acessa uma API externa, (OpenAI API) envia requisição para que a IA crie uma imagem, e recebe a requisição de resposta. (Não foi implementado gravação dos dados no AWS DinamoDB)
+
+3° Exemplo ilustrativo de código de serviço em Python 3.9, escrito no formato suportado pelo AWS Lambda. Este serviço acessa uma API externa, (OpenAI API) envia requisição para que a IA crie uma imagem, e recebe a requisição de resposta e grava a imagem no Bucket S3. (Não foi implementado gravação dos dados no AWS DinamoDB)
 
 Arquivo: app.py
 
@@ -166,10 +168,16 @@ import requests
 import json
 import os
 import openai
+import boto3
 import wget
-import uuid
 
 def handler(event, context):
+    # Este serviço recebe uma requisição formato JSON, com os requisitos da imagem,
+    # envia a requisição para a IA via API OpenAI API, que elabora a imagem e retona um URL com a imagem.
+    # O serviço recebe a requisição, baixa a imagem em diretório temporário e envia o aquivo para o S3.
+    # Retorna ao cliente mensagem informando o resultado do processamento. 
+    # A integração com DinamoDB, está agendada para a próxima refatoração.
+
     # Simulação de entrada de dados no formato JSON
     solicitacao_cliente = {
         "prompt": "Crie uma cópia idêntica da obra: Relógios Encontrando Relógios - Salvador Dalí",
@@ -177,42 +185,58 @@ def handler(event, context):
         "size": "1024x1024"
     }
     payload = json.dumps(solicitacao_cliente)
+
     # Para gerar o token cadastre-se em (https://beta.openai.com/account/api-keys)
     # Token de acesso
     # Atenção: Não permita que o seu token seja descoberto, neste exemplo esse token
     #          já foi revogado (cancelado)
-    token = openai.api_key = "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"
+    token = openai.api_key = "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"
+
     # Endpoint do OpenAI API a cada requisição enviada uma resposta é retornada.
     # https://beta.openai.com/docs/api-reference/images
     url = "https://api.openai.com/v1/images/generations"
+
     # Cabeçalho com formato e o token de acesso. O Token é passado via Header no POST
     headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + str(token)
     }
+
     # OpenAI API aceita as requisições com atributos formatados em JSON
     # Atributos: Prompt: Entrada de dados, descreva o que deseja que a IA desenhe".
     #                 n: Quantidade de repetições
     #              size: Tamanho das imagens (1024, 512 ou 256)
     # https://beta.openai.com/docs/models/overview
+
     response = requests.request("POST", url, headers=headers, data=payload)
     resposta = json.loads(response.text)
-    # A resposta da API é uma imagem. 
-    # Baixar e gravar a imagem em disco.
-    # URI da imagem que foi gerada.
-    url = resposta['data'][0]['url']
-    # Grava imagem
-    file = "imagemCriada/" + str(uuid.uuid4()) + str(".png")
-    wget.download(url,file)
-    # Verifica se a imagem foi gerada
-    if os.path.exists(file):
+
+    # Configurações internas
+    FILE_NAME = resposta['data'][0]['url']
+    BUCKET_NAME = "2mstech" # Repositório S3
+    OBJECT_NAME = os.path.basename(FILE_NAME)
+    PATH = "/tmp"
+    IMAGEM = OBJECT_NAME + str(".png")
+    PATH_IMAGEM = PATH +"/"+ IMAGEM
+    
+    # Faz o download da imagem que foi gerada, em diretório temporário.
+    wget.download(FILE_NAME,PATH_IMAGEM)
+
+    # Envia a imagem criada para o Bucket Amazon S3:  Upload a new file
+    s3 = boto3.client('s3')
+    with open(PATH_IMAGEM, "rb") as f:
+        s3.upload_fileobj(f, BUCKET_NAME, IMAGEM)
+
+    # Verifica se a imagem foi Baixada
+    if os.path.exists(PATH_IMAGEM):
         # retorna código de sucesso e o nome da imagem gerada
-        value = {"processamento": 200,"imagem": file}
+        value = {"processamento": 200,"imagem": IMAGEM}
         return json.dumps(value)
     else:
         # retorna código de erro.
-        value = {"processamento": 400,"msg": "Erro, imagem não foi criada..."}
-        return json.dumps(value)  
+        value = {"processamento": 400,"msg": "Erro, imagem não foi criada ou baixada..."}       
+        return json.dumps(value)
+  
 # Quando executado via console
 if __name__ == "__main__":
     handler(0,0)
@@ -229,34 +253,37 @@ aiohttp==3.8.3
 aiosignal==1.3.1
 async-timeout==4.0.2
 attrs==22.2.0
+boto3==1.26.54
+botocore==1.29.54
 certifi==2022.12.7
 charset-normalizer==2.1.1
 click==8.1.3
-Flask==2.2.2
 frozenlist==1.3.3
 idna==3.4
 importlib-metadata==6.0.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
+jmespath==1.0.1
 MarkupSafe==2.1.2
 multidict==6.0.4
 openai==0.26.1
+python-dateutil==2.8.2
 requests==2.28.2
+s3transfer==0.6.0
+six==1.16.0
 tqdm==4.64.1
 urllib3==1.26.14
-uuid==1.30
 Werkzeug==2.2.2
 wget==3.2
 yarl==1.8.2
 zipp==3.11.0
-
 ```
 <!-- #endregion -->
 
 **Gerar imagem e enviar para AWS**
 
 <!-- #region -->
-Estamos trabalhando com containers Dockers; usaremos o Docker compose para gerenciar a criação da imagem e o container que será aplicado. Os próximos passos são:
+Estamos trabalhando com containers Dockers; usaremos o Docker compose para o gerenciar as imagens. Os próximos passos são:
 
 1° criar arquivo docker-compose.yml
 
@@ -288,7 +315,7 @@ CMD [ "app.handler" ]
 
 ```
 
-3° Gerar a imagem docker
+3° Gerar a imagem docker e testar
 
 ```python
 
@@ -308,7 +335,7 @@ Build da imagem do container do microsserviço gerado com sucesso.
 Referência: [Amazon Elastic Container Registry Documentation](https://docs.aws.amazon.com/ecr/)
 
 <!-- #region -->
-Renomeie a imagem de acordo requerido pelo ECR e envie.
+Renomeie a imagem de acordo requerido pelo ECR e envie o microsserviço.
 ```python
 $ docker tag txt2img-microsservicos:latest 65********48.dkr.ecr.us-east-1.amazonaws.com/2ms:latest
 $ docker push 65********48.dkr.ecr.us-east-1.amazonaws.com/2ms:latest
@@ -319,16 +346,101 @@ Imagem enviada para o repositório com sucesso.
 ![](img/fig6.png)
 
 
-**Última etapa: Criar a Função, API Gateway, o Endpoint e Testar.**
+**Última etapa (AWS): Criar a Função, API Gateway, Bucket S3, Endpoint e Testar.**
 
+
+**Rquisitos:**
 
 1° Crie usuário no Identity and Access Management (IAM), configure permissões e gere a chave de acesso;<br>
-2° Configure a chave de acesso no seu ambinte desenvolvimento; <br>
+2° Configure a chave de acesso no seu ambiente desenvolvimento; <br>
 3° Crie a Função e use a imagem que foi enviada para o ECR;<br>
-4° Crie e configure um Bucket S3, para baixar as imagens;<br>
-5° Configure as permissões e rotas de acesso ao S3;
+4° Crie e configure um Bucket S3 para receber as imagens (fotos) geradas pelo serviço;<br>
+5° Configure as permissões e rotas de acesso ao S3;<br>
 4° Ajuste e Teste o Lambda;<br>
 6° Crie API Gateway;<br>
 7° Crie o Endpoint público;<br>
 
 Referência: [Implante funções do Lambda em Python com imagens de contêiner](https://docs.aws.amazon.com/pt_br/lambda/latest/dg/python-image.html)
+
+
+**Repositório ECR (Amazon Elastic Container Registry)**
+
+A figura 8. ilustra imagem docker com instância do microsserviço implementado.
+
+
+![](img/fig7.png)
+
+
+**Função como serviço (FaaS): AWS Lambda**
+
+
+Figuras 9 e 13. ilustram a função Lambda, o API Gateway e endpoint do microserviço **Gerador-Imagens**.
+
+
+![](img/fig8.png)
+
+
+![](img/fig12.png)
+
+
+**Crie uma role com permissões para gravação do serviço Lambda no Buckect S3**
+
+
+![](img/fig13.png)
+
+
+**Testes e Ajustes da Função Lambda**
+
+A figura 10. ilustra mensagem de resposta do teste inicial aplicado Lambda.
+
+
+![](img/fig9.png)
+
+
+**Bucket S3: Repositório onde as imagens geradas são armazenadas**
+
+No exemplo abaixo, figura 14. lista o conteúdo do Bucket S3: Imagens (fotos) geradas pelo serviço.
+
+
+![](img/fig10.png)
+
+
+**Endpoint acesso ao serviço**
+
+Nos exemplos figuras 12 e 16. ilustram, acesso direto ao endpoint do Gerador de Imagens. A resposta da requisição é o nome da imagem (foto) que foi criada.
+
+
+![](img/fig11.png)
+
+
+**Postman**
+
+
+![](img/fig14.png)
+
+
+**Imagens**
+A figura 17. ilustra todas as imagens que foram geradas pelo microserviço. 
+
+O microsserviço recebeu um JSON com a quantidade, tamanho e característica da imagem a ser gerada. 
+
+Para as ilustrações que seguem abaixo as características foram:
+>**Crie uma cópia idêntica da obra: Relógios Encontrando Relógios - Salvador Dalí**
+
+
+![](img/fig15.png)
+
+
+**Conclusão**
+
+
+Concluímos que a implantação de um microsserviço na AWS é um processo altamente complexo, que requer um planejamento cuidadoso e uma compreensão profunda das ferramentas e serviços da AWS. Embora este artigo tenha fornecido uma visão geral dessa jornada, são necessários mais testes para garantir que todos os aspectos sejam considerados de forma apropriada. Portanto, recomendamos a realização de testes adicionais para validar os detalhes do processo de implantação. Além disso, recomendamos que os usuários também realizem testes de carga para garantir o desempenho adequado do microsserviço.
+
+
+Gratidão
+
+[Carlos Eugênio](https://github.com/carlosemsantana )
+
+Referências:<BR>
+[1] https://beta.openai.com/<BR>
+[2] https://docs.aws.amazon.com/
