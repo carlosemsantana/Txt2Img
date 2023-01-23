@@ -129,7 +129,7 @@ Vamos escrever um microsserviço com base no diagrama de entradas e saídas, Fig
 **Requitos Técnicos**
 
 
-1° Cadastro e cheve de acesso aos recursos da AWS;<br>
+1° Cadastro e chave de acesso aos recursos da AWS;<br>
 2° Cadastro e chave de acesso - API OpenAI API;<br>
 3° Python 3.9;<br>
 4° AWS Command Line Interface; ([Installing or updating the latest version of the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html))<br>
